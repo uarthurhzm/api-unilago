@@ -14,6 +14,7 @@ use App\Application\Controllers\ProfessorController;
 use App\Application\Controllers\SecretaryController;
 use App\Application\Controllers\StudentController;
 use App\Application\Controllers\TesteController;
+use App\Application\Middlewares\AuthMiddleware;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Infrastructure\Http\Router;
@@ -96,133 +97,133 @@ try {
     Router::GET(
         Routes::STUDENT,
         [StudentController::class, 'Get'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter informações da carteirinha do aluno
     Router::GET(
         Routes::STUDENT_CARD,
         [StudentController::class, 'GetStudentCardInfo'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter disciplinas do aluno
     Router::GET(
         Routes::STUDENT_DISCIPLINES,
         [StudentController::class, 'GetStudentDisciplines'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter disciplinas substitutas do aluno
     Router::GET(
         Routes::STUDENT_SUBSTITUTE_DISCIPLINES,
         [StudentController::class, 'GetStudentSubstituteDisciplines'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter aluno pela senha
     Router::GET(
         Routes::STUDENT_BY_PASSWORD,
         [StudentController::class, 'GetStudentByPassword'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter atividades extracurriculares do aluno
     Router::GET(
         Routes::STUDENT_EXTRACURRICULAR_ACTIVITIES,
         [ExtracurricularController::class, 'GetByStudent'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter conteúdos das disciplinas do aluno
     Router::GET(
         Routes::STUDENT_DISCIPLINES_CONTENT,
         [StudentController::class, 'GetStudentDisciplinesContent'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter certificados de extensão do aluno
     Router::GET(
         Routes::STUDENT_EXTENSION_CERTIFICATES,
         [StudentController::class, 'GetStudentExtensionCertificates'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter participação do aluno em reunião científica
     Router::GET(
         Routes::STUDENT_SCIENTIFIC_MEETING,
         [StudentController::class, 'GetStudentScientificMeeting'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter participação do aluno como ouvinte em reunião
     Router::GET(
         Routes::STUDENT_LISTENER_MEETING,
         [StudentController::class, 'GetStudentListenerMeeting'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter participação do aluno na semana acadêmica
     Router::GET(
         Routes::STUDENT_ACADEMIC_WEEK,
         [StudentController::class, 'GetStudentAcademicWeek'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Registrar presença do aluno
     Router::POST(
         Routes::STUDENT_PRESENCE,
         [StudentController::class, 'PostStudentPresence'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter notas do aluno
     Router::GET(
         Routes::STUDENT_GRADES,
         [StudentController::class, 'GetStudentGrades'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter documentos do aluno
     Router::GET(
         Routes::STUDENT_DOCUMENTS,
         [StudentController::class, 'GetStudentDocuments'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter faltas do aluno
     Router::GET(
         Routes::STUDENT_ABSENCES,
         [StudentController::class, 'GetStudentAbsences'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter todos os professores do aluno
     Router::GET(
         Routes::STUDENT_ALL_PROFESSORS,
         [StudentController::class, 'GetAllProfessorsByStudent'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter ementa das disciplinas do aluno
     Router::GET(
         Routes::STUDENT_DISCIPLINES_SYLLABUS,
         [StudentController::class, 'GetStudentDisciplinesSyllabus'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Alterar senha do aluno
     Router::PATCH(
         Routes::PATCH_STUDENT_PASSWORD,
         [StudentController::class, 'PatchStudentPassword'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter ticket do aluno
     Router::GET(
         Routes::STUDENT_TICKET,
         [StudentController::class, 'GetTicket'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -231,7 +232,7 @@ try {
     Router::GET(
         Routes::CAMPUSES,
         [CampusController::class, 'GetAllCampus'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -240,7 +241,7 @@ try {
     Router::GET(
         Routes::SCHEDULED_EVENTS,
         [EventsController::class, 'GetAll'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -249,28 +250,28 @@ try {
     Router::GET(
         Routes::COURSES,
         [CourseController::class, 'GetAllCourses'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter grade horária do curso
     Router::GET(
         Routes::COURSE_SCHEDULE,
         [CourseController::class, 'GetCourseSchedule'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter oportunidades do curso
     Router::GET(
         Routes::COURSE_OPPORTUNITIES,
         [CourseController::class, 'GetOpportunitiesByCourse'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter duração do curso
     Router::GET(
         Routes::COURSE_DURATION,
         [CourseController::class, 'GetCourseDuration'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -279,28 +280,28 @@ try {
     Router::POST(
         Routes::POST_MESSAGE,
         [MessageController::class, 'PostMessage'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter mensagens do usuário
     Router::GET(
         Routes::MESSAGES,
         [MessageController::class, 'GetUserMessages'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Comentar em mensagem
     Router::POST(
         Routes::MESSAGE_POST_COMMENT,
         [MessageController::class, 'PostComment'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter comentários de uma mensagem
     Router::GET(
         Routes::MESSAGE_COMMENTS,
         [MessageController::class, 'GetMessageComments'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -309,21 +310,21 @@ try {
     Router::GET(
         Routes::EXTRACURRICULAR_ACTIVITIES,
         [ExtracurricularController::class, 'GetAll'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Cadastrar atividade extracurricular
     Router::POST(
         Routes::POST_EXTRACURRICULAR_ACTIVITY,
         [ExtracurricularController::class, 'PostActivity'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Excluir atividade extracurricular
     Router::DELETE(
         Routes::DELETE_EXTRACURRICULAR_ACTIVITY,
         [ExtracurricularController::class, 'DeleteActivity'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -332,49 +333,49 @@ try {
     Router::GET(
         Routes::LIBRARY_COLLECTIONS,
         [LibraryController::class, 'GetAllCollections'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter livro por ID
     Router::GET(
         Routes::LIBRARY_BOOK,
         [LibraryController::class, 'GetBookById'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter livros emprestados pelo aluno
     Router::GET(
         Routes::LIBRARY_LOANED_BOOKS,
         [LibraryController::class, 'GetLoanedBooksByStudent'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Reservar livro
     Router::POST(
         Routes::LIBRARY_RESERVE_BOOK,
         [LibraryController::class, 'PostReserveBook'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter livros reservados pelo aluno
     Router::GET(
         Routes::LIBRARY_RESERVED_BOOKS,
         [LibraryController::class, 'GetReservedBooksByStudent'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Cancelar reserva de livro
     Router::DELETE(
         Routes::LIBRARY_CANCEL_RESERVE,
         [LibraryController::class, 'CancelReserve'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Renovar empréstimo de livro
     Router::POST(
         Routes::LIBRARY_RENEW_BOOK,
         [LibraryController::class, 'RenewBook'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -383,7 +384,7 @@ try {
     Router::GET(
         Routes::GET_ALL_IES_PROFESSORS,
         [ProfessorController::class, 'GetAllIESProfessors'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -392,7 +393,7 @@ try {
     Router::GET(
         Routes::FINANCIAL_TAXES,
         [FinancialController::class, 'GetTaxes'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -401,70 +402,70 @@ try {
     Router::POST(
         Routes::SECRETARY_ENROLLMENT_CERTIFICATE_REQUEST,
         [SecretaryController::class, 'PostEnrollmentCertificateRequest'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter certificados de matrícula do aluno
     Router::GET(
         Routes::SECRETARY_ENROLLMENT_CERTIFICATES,
         [SecretaryController::class, 'GetEnrollmentCertificatesByStudent'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter atestados do aluno
     Router::GET(
         Routes::SECRETARY_STUDENT_ATTESTS,
         [SecretaryController::class, 'GetStudentAttests'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Solicitar histórico acadêmico
     Router::POST(
         Routes::SECRETARY_ACADEMIC_RECORD_REQUEST,
         [SecretaryController::class, 'PostAcademicRecordRequest'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter permissões de documentos do aluno
     Router::GET(
         Routes::SECRETARY_STUDENT_DOCUMENTS_PERMISSION,
         [StudentController::class, 'GetStudentDocumentsPermission'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter histórico acadêmico do aluno
     Router::GET(
         Routes::SECRETARY_STUDENT_ACADEMIC_RECORD,
         [SecretaryController::class, 'GetStudentAcademicRecord'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Solicitar prova substitutiva
     Router::POST(
         Routes::SECRETARY_SUBSTITUTE_EXAM_REQUEST,
         [SecretaryController::class, 'PostSubstituteExamRequest'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter solicitações de prova substitutiva do aluno
     Router::GET(
         Routes::SECRETARY_STUDENT_SUBSTITUTE_EXAM_REQUESTS,
         [SecretaryController::class, 'GetStudentSubstituteExamRequests'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Excluir solicitação de prova substitutiva
     Router::DELETE(
         Routes::SECRETARY_DELETE_SUBSTITUTE_EXAM_REQUEST,
         [SecretaryController::class, 'DeleteSubstituteExamRequest'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Obter dependências do aluno
     Router::GET(
         Routes::SECRETARY_STUDENT_DEPENDENCIES,
         [SecretaryController::class, 'GetStudentDependencies'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -473,21 +474,21 @@ try {
     Router::GET(
         Routes::CPA_QUESTIONS,
         [CpaController::class, 'GetStudentInstitutionQuestions'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Enviar resposta da CPA
     Router::POST(
         Routes::POST_CPA_ANSWER,
         [CpaController::class, 'PostAnswer'],
-        true
+        [AuthMiddleware::class]
     );
 
     //NOTE - Verificar se o aluno já respondeu a CPA
     Router::GET(
         Routes::CPA_CHECK,
         [CpaController::class, 'CheckCpa'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 
@@ -496,7 +497,7 @@ try {
     Router::GET(
         Routes::NOTICES,
         [NoticeController::class, 'GetNotices'],
-        true
+        [AuthMiddleware::class]
     );
     //!SECTION
 

@@ -14,13 +14,13 @@ class Router
 {
     private static array $routes = [];
 
-    private static function add(string $method, string $path, array $handler, bool $isPrivate): void
+    private static function add(string $method, string $path, array $handler, array $middlewares): void
     {
         self::$routes[] = [
             'method' => $method,
             'path' => $path,
             'handler' => $handler,
-            'isPrivate' => $isPrivate
+            'middlewares' => $middlewares
         ];
     }
 
@@ -41,9 +41,9 @@ class Router
 
         $path = $arguments[0] ?? '';
         $handler = $arguments[1] ?? [];
-        $isPrivate = $arguments[2] ?? false;
+        $middlewares = $arguments[2] ?? [];
 
-        self::add($method, $path, $handler, $isPrivate);
+        self::add($method, $path, $handler, $middlewares);
     }
 
     public static function dispatch(Request $request): void
@@ -113,9 +113,15 @@ class Router
 
         $route = self::$routes[array_search($handler, array_column(self::$routes, 'handler'))];
 
-        if ($route['isPrivate'] && !(new AuthMiddleware($request))) {
-            Response::unauthorized('Acesso não autorizado');
-            return;
+        if ($route['middlewares']) {
+            foreach ($route['middlewares'] as $middleware) {
+                $middlewareInstance = new $middleware();
+                [$data, $message, $status] = $middlewareInstance->handle($request);
+                if (!$data) {
+                    Response::$status($message);
+                    return;
+                }
+            }
         }
 
         $reflection = new ReflectionMethod($controller, $method);
