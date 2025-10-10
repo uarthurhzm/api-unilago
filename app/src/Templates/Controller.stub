@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Application\Controllers;
+
+use App\Domain\{{NAME}}\Services\{{NAME}}Service;
+use App\Infrastructure\Http\Response;
+use App\Shared\Attributes\FromBody;
+use App\Shared\Attributes\FromRoute;
+
+class {{NAME}}Controller extends ControllerBase
+{
+    private {{NAME}}Service ${{name}}Service;
+
+    public function __construct()
+    {
+        $this->{{name}}Service = new {{NAME}}Service();
+    }
+}
+

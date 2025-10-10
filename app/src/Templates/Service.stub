@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Domain\{{NAME}}\Service;
+
+use App\Domain\{{NAME}}\Repository\{{NAME}}Repository;
+
+class {{NAME}}Service
+{
+    private {{NAME}}Repository ${{NAME}}Repository;
+
+    public function __construct()
+    {
+        $this->{{NAME}}Repository = new {{NAME}}Repository();
+    }
+}
