@@ -14,10 +14,13 @@ class AuthService
 {
     private AuthRepository $authRepository;
     private JWT $jwt;
+    private CookieManager $cookieManager;
+
     public function __construct()
     {
         $this->authRepository = new AuthRepository();
         $this->jwt = new JWT();
+        $this->cookieManager = new CookieManager();
     }
 
     public function Login(string $login, string $password)
@@ -30,7 +33,7 @@ class AuthService
 
         $accessToken = $this->jwt->generateAccessToken(['user_name' => $user->LOGIN]);
         $refreshToken = $this->jwt->generateRefreshToken($user->LOGIN);
-        CookieManager::setRefreshToken($refreshToken);
+        $this->cookieManager->setRefreshToken($refreshToken);
 
         return [
             'user' => $user,

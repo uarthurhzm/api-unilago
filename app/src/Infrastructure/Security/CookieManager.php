@@ -2,39 +2,49 @@
 
 namespace App\Infrastructure\Security;
 
+use App\Shared\Enum\DotEnvKeysEnum;
+use App\Shared\Utils\DotEnv;
+
 class CookieManager
 {
-    private static string $refreshTokenName = 'refresh_token';
-    private static int $refreshTokenExpiry = 604800; // 7 dias
-    private static bool $isProduction = true; // colocar true em prd
+    private string $refreshTokenName;
+    private int $refreshTokenExpiry;
+    private bool $isProduction;
 
-    public static function setRefreshToken(string $token): void
+    public function __construct()
+    {
+        $this->refreshTokenName = 'refresh_token';
+        $this->refreshTokenExpiry = DotEnv::get(DotEnvKeysEnum::JWT_REFRESH_EXPIRATION->value);
+        $this->isProduction = DotEnv::get('APP_ENV') === 'production';
+    }
+
+    public function setRefreshToken(string $token): void
     {
         setcookie(
-            name: self::$refreshTokenName,
+            name: $this->refreshTokenName,
             value: $token,
             expires_or_options: [
-                'expires' => time() + self::$refreshTokenExpiry,
+                'expires' => time() + $this->refreshTokenExpiry,
                 'samesite' => 'None', // 'Lax' ou 'Strict' se não for cross-site
-                'secure' => self::$isProduction,
+                'secure' => $this->isProduction,
             ]
         );
     }
 
-    public static function getRefreshToken(): ?string
+    public function getRefreshToken(): ?string
     {
-        return $_COOKIE[self::$refreshTokenName] ?? null;
+        return $_COOKIE[$this->refreshTokenName] ?? null;
     }
 
-    public static function clearRefreshToken(): void
+    public function clearRefreshToken(): void
     {
         setcookie(
-            name: self::$refreshTokenName,
+            name: $this->refreshTokenName,
             value: '',
             expires_or_options: [
                 'expires' => time() - 3600,
                 'samesite' => 'None', // 'Lax' ou 'Strict' se não for cross-site
-                'secure' => self::$isProduction,
+                'secure' => $this->isProduction,
 
             ]
         );

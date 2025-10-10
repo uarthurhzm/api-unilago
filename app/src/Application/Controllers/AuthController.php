@@ -17,11 +17,13 @@ class AuthController extends ControllerBase
 {
     private AuthService $authService;
     private JWT $jwt;
+    private CookieManager $cookieManager;
 
     public function __construct()
     {
         $this->authService = new AuthService();
         $this->jwt = new JWT();
+        $this->cookieManager = new CookieManager();
     }
 
     public function Login(#[FromBody] LoginDTO $data): void
@@ -40,20 +42,20 @@ class AuthController extends ControllerBase
 
     public function Logout(): void
     {
-        CookieManager::clearRefreshToken();
+        $this->cookieManager->clearRefreshToken();
         Response::success(message: 'Logout realizado com sucesso');
     }
 
     public function RefreshToken(): void
     {
-        $refreshToken = CookieManager::getRefreshToken();
+        $refreshToken = $this->cookieManager->getRefreshToken();
 
         if (!$refreshToken)
             Response::unauthorized('Refresh token não encontrado');
 
         $payload = $this->jwt->validateRefreshToken($refreshToken);
         if (!$payload) {
-            CookieManager::clearRefreshToken();
+            $this->cookieManager->clearRefreshToken();
             Response::unauthorized('Refresh token inválido ou expirado');
         }
 
@@ -64,7 +66,7 @@ class AuthController extends ControllerBase
         try {
             $accessToken = $this->jwt->generateAccessToken(['user_name' => $payload['user_name']]);
             $newRefreshToken = $this->jwt->generateRefreshToken($payload['user_name']);
-            CookieManager::setRefreshToken($newRefreshToken);
+            $this->cookieManager->setRefreshToken($newRefreshToken);
 
             Response::success(['token' => $accessToken, 'user' => $user], 'Token renovado com sucesso');
         } catch (\Throwable $th) {
