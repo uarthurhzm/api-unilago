@@ -116,7 +116,7 @@ class Router
 
         $route = self::$routes[array_search($handler, array_column(self::$routes, 'handler'))];
 
-        if ($route['isPrivate'] && !AuthMiddleware::handle($request)) {
+        if ($route['isPrivate'] && !(new AuthMiddleware($request))) {
             Response::unauthorized('Acesso não autorizado');
             return;
         }
