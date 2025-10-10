@@ -24,29 +24,26 @@ class Router
         ];
     }
 
-    public static function GET(string $path, array $handler, bool $isPrivate = false): void
+    public static function __callStatic($name, $arguments): void
     {
-        self::add(MethodEnum::GET->value, $path, $handler, $isPrivate);
-    }
+        $method = strtoupper($name);
+        $allowedMethods = [
+            MethodEnum::GET->value,
+            MethodEnum::POST->value,
+            MethodEnum::PATCH->value,
+            MethodEnum::PUT->value,
+            MethodEnum::DELETE->value,
+        ];
 
-    public static function POST(string $path, array $handler, bool $isPrivate = false): void
-    {
-        self::add(MethodEnum::POST->value, $path, $handler, $isPrivate);
-    }
+        if (!in_array($method, $allowedMethods)) {
+            throw new \BadMethodCallException("Método HTTP '{$method}' não suportado.");
+        }
 
-    public static function PATCH(string $path, array $handler, bool $isPrivate = false): void
-    {
-        self::add(MethodEnum::PATCH->value, $path, $handler, $isPrivate);
-    }
+        $path = $arguments[0] ?? '';
+        $handler = $arguments[1] ?? [];
+        $isPrivate = $arguments[2] ?? false;
 
-    public static function PUT(string $path, array $handler, bool $isPrivate = false): void
-    {
-        self::add(MethodEnum::PUT->value, $path, $handler, $isPrivate);
-    }
-
-    public static function DELETE(string $path, array $handler, bool $isPrivate = false): void
-    {
-        self::add(MethodEnum::DELETE->value, $path, $handler, $isPrivate);
+        self::add($method, $path, $handler, $isPrivate);
     }
 
     public static function dispatch(Request $request): void
