@@ -105,8 +105,11 @@ class ExtracurricularRepository
         ]);
 
         $results = $stmt->fetchAll();
+        // var_dump($results);
         return array_map(function ($result) {
+            $result->DESCRICAO = trim(iconv('ISO-8859-1', 'UTF-8', $result->DESCRICAO));
             $result->NM_ATV = trim(iconv('ISO-8859-1', 'UTF-8', $result->NM_ATV));
+            $result->OBS = trim(iconv('ISO-8859-1', 'UTF-8', $result->OBS));
             return $result;
         }, $results);
     }
