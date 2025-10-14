@@ -11,7 +11,9 @@ use App\Infrastructure\Security\CookieManager;
 use App\Infrastructure\Security\JWT;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpPost;
 use App\Shared\Exceptions\UserCpfNotFoundException;
+use App\Shared\Utils\Routes;
 
 class AuthController extends ControllerBase
 {
@@ -26,6 +28,7 @@ class AuthController extends ControllerBase
         $this->cookieManager = new CookieManager();
     }
 
+    #[HttpPost(Routes::AUTH_LOGIN, [])]
     public function Login(#[FromBody] LoginDTO $data): void
     {
         try {
@@ -40,12 +43,14 @@ class AuthController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::AUTH_LOGOUT)]
     public function Logout(): void
     {
         $this->cookieManager->clearRefreshToken();
         Response::success(message: 'Logout realizado com sucesso');
     }
 
+    #[HttpPost(Routes::AUTH_REFRESH_TOKEN, [])]
     public function RefreshToken(): void
     {
         $refreshToken = $this->cookieManager->getRefreshToken();
@@ -74,6 +79,7 @@ class AuthController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::AUTH_RECOVERY_PASSWORD, [])]
     public function RecoveryPassword(
         #[FromRoute] string $cpf,
         #[FromBody] GetByCpfDTO $dto

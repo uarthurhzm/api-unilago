@@ -10,7 +10,11 @@ use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpDelete;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Attributes\HttpPost;
 use App\Shared\Helpers\Validators;
+use App\Shared\Utils\Routes;
 
 class LibraryController extends ControllerBase
 {
@@ -21,6 +25,7 @@ class LibraryController extends ControllerBase
         $this->libraryService = new LibraryService();
     }
 
+    #[HttpGet(Routes::LIBRARY_COLLECTIONS)]
     public function GetAllCollections(#[FromBody] GetAllCollectionsDTO $data): void
     {
         try {
@@ -31,6 +36,7 @@ class LibraryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::LIBRARY_BOOK)]
     public function GetBookById(#[FromRoute] string $bookId): void
     {
         try {
@@ -41,6 +47,7 @@ class LibraryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::LIBRARY_LOANED_BOOKS)]
     public function GetLoanedBooksByStudent(
         #[FromRoute] string $cd_mat,
         #[FromBody] GetLoanedBooksByStudentDTO $data
@@ -53,6 +60,7 @@ class LibraryController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::LIBRARY_RESERVE_BOOK)]
     public function PostReserveBook(#[FromBody] GetAllCollectionsDTO $data): void
     {
         try {
@@ -65,6 +73,7 @@ class LibraryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::LIBRARY_RESERVED_BOOKS)]
     public function GetReservedBooksByStudent(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -75,6 +84,7 @@ class LibraryController extends ControllerBase
         }
     }
 
+    #[HttpDelete(Routes::LIBRARY_CANCEL_RESERVE)]
     public function CancelReserve(#[FromRoute] string $reserveId): void
     {
         try {
@@ -85,6 +95,7 @@ class LibraryController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::LIBRARY_RENEW_BOOK)]
     public function RenewBook(#[FromRoute] string $seq_epr): void
     {
         try {

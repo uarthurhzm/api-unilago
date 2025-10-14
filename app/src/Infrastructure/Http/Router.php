@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Http;
 
-use App\Application\Middlewares\AuthMiddleware;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
 use App\Shared\DTO\BaseDTO;
@@ -14,7 +13,7 @@ class Router
 {
     private static array $routes = [];
 
-    private static function add(string $method, string $path, array $handler, array $middlewares): void
+    public static function add(string $method, string $path, array $handler, array $middlewares): void
     {
         self::$routes[] = [
             'method' => $method,

@@ -6,6 +6,8 @@ use App\Domain\Events\DTO\GetEventsDTO;
 use App\Domain\Events\Services\EventsService;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class EventsController extends ControllerBase
 {
@@ -16,6 +18,7 @@ class EventsController extends ControllerBase
         $this->eventsService = new EventsService();
     }
 
+    #[HttpGet(Routes::SCHEDULED_EVENTS)]
     public function GetEvents(#[FromBody] GetEventsDTO $data): void
     {
         try {

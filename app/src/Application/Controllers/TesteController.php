@@ -6,10 +6,13 @@ use App\Infrastructure\Database;
 use App\Infrastructure\Http\PrivateRoute;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class TesteController
 {
 
+    #[HttpGet(Routes::DB_TABLE_NAMES)]
     public function DbTableNames()
     {
         Response::success(Database::conn()->query(
@@ -23,6 +26,7 @@ class TesteController
         )->fetchAll(), 'Tabelas do banco');
     }
 
+    #[HttpGet(Routes::DB_FIELDS_NAMES)]
     public function DbFieldsNames(Request $request)
     {
         $tableName = $request->getParams()['tableName'];

@@ -12,6 +12,10 @@ use App\Shared\Helpers\Validators;
 use App\Domain\Secretary\Service\SecretaryService;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpDelete;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Attributes\HttpPost;
+use App\Shared\Utils\Routes;
 
 class SecretaryController extends ControllerBase
 {
@@ -22,6 +26,7 @@ class SecretaryController extends ControllerBase
         $this->secretaryService = new SecretaryService();
     }
 
+    #[HttpGet(Routes::SECRETARY_ENROLLMENT_CERTIFICATES)]
     public function GetEnrollmentCertificatesByStudent(#[FromRoute] string $cd_mat)
     {
         try {
@@ -32,6 +37,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::SECRETARY_ENROLLMENT_CERTIFICATE_REQUEST)]
     public function PostEnrollmentCertificateRequest(#[FromBody] PostCertificateRequestDTO $data)
     {
         try {
@@ -42,6 +48,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::SECRETARY_STUDENT_ATTESTS)]
     public function GetStudentAttests(#[FromRoute] string $cd_mat)
     {
         try {
@@ -52,6 +59,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::SECRETARY_ACADEMIC_RECORD_REQUEST)]
     public function PostAcademicRecordRequest(#[FromBody] PostCertificateRequestDTO $data)
     {
         try {
@@ -64,6 +72,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::SECRETARY_STUDENT_ACADEMIC_RECORD)]
     public function GetStudentAcademicRecord(#[FromRoute] string $cd_mat)
     {
         try {
@@ -74,6 +83,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::SECRETARY_STUDENT_SUBSTITUTE_EXAM_REQUESTS)]
     public function GetStudentSubstituteExamRequests(#[FromRoute] string $cd_mat)
     {
         try {
@@ -84,6 +94,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::SECRETARY_SUBSTITUTE_EXAM_REQUEST)]
     public function PostSubstituteExamRequest(#[FromBody] PostSubstituteExamRequestDTO $data)
     {
         try {
@@ -94,6 +105,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpDelete(Routes::SECRETARY_DELETE_SUBSTITUTE_EXAM_REQUEST)]
     public function DeleteSubstituteExamRequest(
         #[FromRoute] string $protocol,
         #[FromBody] DeleteSubstituteExamRequestDTO $data
@@ -106,6 +118,7 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::SECRETARY_STUDENT_DEPENDENCIES)]
     public function GetStudentDependencies(#[FromRoute] string $cd_mat)
     {
         try {

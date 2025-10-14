@@ -5,6 +5,8 @@ namespace App\Application\Controllers;
 use App\Domain\Professor\Service\ProfessorService;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class ProfessorController extends ControllerBase
 {
@@ -15,6 +17,7 @@ class ProfessorController extends ControllerBase
         $this->professorService = new ProfessorService();
     }
 
+    #[HttpGet(Routes::GET_ALL_IES_PROFESSORS)]
     public function GetAllIESProfessors(): void
     {
         try {

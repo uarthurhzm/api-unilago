@@ -4,10 +4,16 @@ namespace App\Application\Controllers;
 
 use App\Domain\Extracurricular\DTO\PostActivityDTO;
 use App\Domain\Extracurricular\Services\ExtracurricularService;
+use App\Domain\Notice\DTO\GetByStudentDTO;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
+use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpDelete;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Attributes\HttpPost;
 use App\Shared\Helpers\Validators;
+use App\Shared\Utils\Routes;
 
 class ExtracurricularController extends ControllerBase
 {
@@ -18,6 +24,7 @@ class ExtracurricularController extends ControllerBase
         $this->extracurricularService = new ExtracurricularService();
     }
 
+    #[HttpGet(Routes::EXTRACURRICULAR_ACTIVITIES)]
     public function GetAll()
     {
         try {
@@ -28,6 +35,7 @@ class ExtracurricularController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::POST_EXTRACURRICULAR_ACTIVITY)]
     public function PostActivity(#[FromBody] PostActivityDTO $data)
     {
         try {
@@ -38,36 +46,22 @@ class ExtracurricularController extends ControllerBase
         }
     }
 
-    public function GetByStudent(Request $request)
-    {
-        $cd_alu = $request->getParams()['cd_alu'] ?? null;
-        $data = $request->getData();
-        $data['cd_alu'] = $cd_alu;
-
-        if (!Validators::verifyParameters(['cd_cso'], $data))
-            Response::error("Parâmetros inválidos");
-
-        if (Validators::isEmpty($data['cd_alu']) || !Validators::isNumber($data['cd_alu']))
-            Response::badRequest("Matrícula do aluno inválida");
-
-        if (Validators::isEmpty($data['cd_cso']) || !Validators::isNumber($data['cd_cso']))
-            Response::badRequest("Código do curso inválido");
-
+    #[HttpGet(Routes::STUDENT_EXTRACURRICULAR_ACTIVITIES)]
+    public function GetByStudent(
+        #[FromRoute] string $cd_alu,
+        #[FromBody] GetByStudentDTO $data
+    ) {
         try {
-            $result = $this->extracurricularService->GetByStudent($data['cd_alu'], $data['cd_cso']);
-            Response::success($result);
+            $result = $this->extracurricularService->GetByStudent($cd_alu, $data->cd_cso);
+            Response::success($result, "Atividades extracurriculares do aluno recuperadas com sucesso");
         } catch (\Throwable $th) {
             Response::error("Erro ao buscar atividades extracurriculares do aluno: " . $th->getMessage());
         }
     }
 
-    public function DeleteActivity(Request $request)
+    #[HttpDelete(Routes::DELETE_EXTRACURRICULAR_ACTIVITY)]
+    public function DeleteActivity(#[FromRoute] string $cod_lanc)
     {
-        $cod_lanc = $request->getParams()['cod_lanc'] ?? null;
-
-        if (Validators::isEmpty($cod_lanc) || !Validators::isNumber($cod_lanc))
-            Response::badRequest("Código da atividade inválido");
-
         try {
             $this->extracurricularService->DeleteActivity($cod_lanc);
             Response::success("Atividade extracurricular deletada com sucesso");

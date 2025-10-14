@@ -10,7 +10,10 @@ use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Attributes\HttpPost;
 use App\Shared\Helpers\Validators;
+use App\Shared\Utils\Routes;
 use LDAP\Result;
 
 class MessageController extends ControllerBase
@@ -22,6 +25,7 @@ class MessageController extends ControllerBase
         $this->messageService = new MessageService();
     }
 
+    #[HttpPost(Routes::POST_MESSAGE)]
     public function PostMessage(#[FromBody] PostMessageDTO $data)
     {
         try {
@@ -32,6 +36,7 @@ class MessageController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::MESSAGES)]
     public function GetUserMessages(
         #[FromRoute] string $cd_mat,
         #[FromBody] GetUserMessagesDTO $data
@@ -47,6 +52,7 @@ class MessageController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::MESSAGE_POST_COMMENT)]
     public function PostComment(
         #[FromRoute] string $messageId,
         #[FromBody] PostCommentDTO $data
@@ -59,6 +65,7 @@ class MessageController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::MESSAGE_COMMENTS)]
     public function GetMessageComments(#[FromRoute] string $messageId)
     {
         try {

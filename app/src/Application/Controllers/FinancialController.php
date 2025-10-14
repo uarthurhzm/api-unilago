@@ -5,6 +5,8 @@ namespace App\Application\Controllers;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Services\FinancialService;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class FinancialController extends ControllerBase
 {
@@ -15,6 +17,7 @@ class FinancialController extends ControllerBase
         $this->financialService = new FinancialService();
     }
 
+    #[HttpGet(Routes::FINANCIAL_TAXES)]
     public function GetTaxes()
     {
         try {

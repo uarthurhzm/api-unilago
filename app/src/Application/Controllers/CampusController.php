@@ -4,6 +4,8 @@ namespace App\Application\Controllers;
 
 use App\Domain\Campus\Services\CampusService;
 use App\Infrastructure\Http\Response;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class CampusController extends ControllerBase
 {
@@ -14,6 +16,7 @@ class CampusController extends ControllerBase
         $this->campusService = new CampusService();
     }
 
+    #[HttpGet(Routes::CAMPUSES)]
     public function GetAllCampus()
     {
         try {

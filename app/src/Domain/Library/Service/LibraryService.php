@@ -61,9 +61,9 @@ class LibraryService
 
     public function PostReserveBook(GetAllCollectionsDTO $data)
     {
-        if ($this->libraryRepository->CheckReserve($data)) {
+        if ($this->libraryRepository->CheckReserve($data))
             throw new AlreadyReservedBookException();
-        }
+
         return $this->libraryRepository->PostReserveBook($data);
     }
 

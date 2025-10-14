@@ -7,6 +7,8 @@ use App\Domain\Notice\Service\NoticeService;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class NoticeController extends ControllerBase
 {
@@ -17,6 +19,7 @@ class NoticeController extends ControllerBase
         $this->NoticeService = new NoticeService();
     }
 
+    #[HttpGet(Routes::NOTICES)]
     public function GetNotices(#[FromBody] GetNoticesDTO $data)
     {
         try {

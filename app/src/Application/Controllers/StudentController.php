@@ -11,6 +11,10 @@ use App\Infrastructure\Http\Response;
 use App\Shared\Exceptions\AlreadyAccountedException;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Attributes\HttpPatch;
+use App\Shared\Attributes\HttpPost;
+use App\Shared\Utils\Routes;
 use SamePasswordException;
 
 class StudentController extends ControllerBase
@@ -22,6 +26,7 @@ class StudentController extends ControllerBase
         $this->studentService = new StudentService();
     }
 
+    #[HttpGet(Routes::STUDENT)]
     public function Get(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -32,6 +37,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_CARD)]
     public function GetStudentCardInfo(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -43,6 +49,7 @@ class StudentController extends ControllerBase
     }
 
 
+    #[HttpGet(Routes::STUDENT_DISCIPLINES)]
     public function GetStudentDisciplines(
         #[FromRoute] string $cd_mat,
         #[FromBody] GetStudentDisciplinesDTO $dto
@@ -55,6 +62,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_SUBSTITUTE_DISCIPLINES)]
     public function GetStudentSubstituteDisciplines(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -65,6 +73,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::STUDENT_PRESENCE)]
     public function PostStudentPresence(#[FromBody] PostStudentPresenceDTO $data): void
     {
         try {
@@ -78,6 +87,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_GRADES)]
     public function GetStudentGrades(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -88,6 +98,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_DOCUMENTS)]
     public function GetStudentDocuments(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -98,6 +109,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_ABSENCES)]
     public function GetStudentAbsences(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -108,6 +120,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_DISCIPLINES_SYLLABUS)]
     public function GetStudentDisciplinesSyllabus(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -118,6 +131,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_ALL_PROFESSORS)]
     public function GetAllProfessorsByStudent(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -128,6 +142,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::STUDENT_BY_PASSWORD)]
     public function GetStudentByPassword(
         #[FromRoute] string $cd_mat,
         #[FromBody] GetStudentByPasswordDTO $dto
@@ -140,6 +155,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpPatch(Routes::PATCH_STUDENT_PASSWORD)]
     public function PatchStudentPassword(
         #[FromRoute] string $cd_mat,
         #[FromBody] PatchStudentPasswordDTO $dto
@@ -154,6 +170,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_DISCIPLINES_CONTENT)]
     public function GetStudentDisciplinesContent(#[FromRoute] string $cd_disc): void
     {
         try {
@@ -164,6 +181,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_EXTENSION_CERTIFICATES)]
     public function GetStudentExtensionCertificates(#[FromRoute] string $login): void
     {
         try {
@@ -174,6 +192,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_SCIENTIFIC_MEETING)]
     public function GetStudentScientificMeeting(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -184,6 +203,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_LISTENER_MEETING)]
     public function GetStudentListenerMeeting(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -194,6 +214,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_ACADEMIC_WEEK)]
     public function GetStudentAcademicWeek(#[FromRoute] string $login): void
     {
         try {
@@ -204,6 +225,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::STUDENT_TICKET)]
     public function GetTicket(#[FromRoute] string $cd_mat): void
     {
         try {
@@ -214,6 +236,7 @@ class StudentController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::SECRETARY_STUDENT_DOCUMENTS_PERMISSION)]
     public function GetStudentDocumentsPermission(#[FromRoute] string $cd_mat): void
     {
         try {

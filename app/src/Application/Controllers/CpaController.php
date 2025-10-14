@@ -8,7 +8,10 @@ use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Attributes\HttpPost;
 use App\Shared\Helpers\Validators;
+use App\Shared\Utils\Routes;
 
 class CpaController extends ControllerBase
 {
@@ -19,6 +22,7 @@ class CpaController extends ControllerBase
         $this->cpaService = new CpaService();
     }
 
+    #[HttpGet(Routes::CPA_QUESTIONS)]
     public function GetStudentInstitutionQuestions(#[FromRoute] string $cd_mat)
     {
         try {
@@ -30,6 +34,7 @@ class CpaController extends ControllerBase
         }
     }
 
+    #[HttpPost(Routes::POST_CPA_ANSWER)]
     public function PostAnswer(#[FromBody] PostAnswerDTO $data)
     {
         try {
@@ -40,6 +45,7 @@ class CpaController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::CPA_CHECK)]
     public function CheckCpa(#[FromRoute] string $cd_mat)
     {
         try {

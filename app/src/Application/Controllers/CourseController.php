@@ -2,12 +2,11 @@
 
 namespace App\Application\Controllers;
 
-use App\Domain\Auth\DTO\CourseScheduleRequestDTO;
 use App\Domain\Course\Service\CourseService;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromRoute;
-use App\Shared\Helpers\Validators;
+use App\Shared\Attributes\HttpGet;
+use App\Shared\Utils\Routes;
 
 class CourseController extends ControllerBase
 {
@@ -18,6 +17,7 @@ class CourseController extends ControllerBase
         $this->courseService = new CourseService();
     }
 
+    #[HttpGet(Routes::COURSES)]
     public function GetAllCourses()
     {
         try {
@@ -28,6 +28,7 @@ class CourseController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::COURSE_SCHEDULE)]
     public function GetCourseSchedule(#[FromRoute] string $cd_cso)
     {
         try {
@@ -38,6 +39,7 @@ class CourseController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::COURSE_OPPORTUNITIES)]
     public function GetOpportunitiesByCourse(#[FromRoute] string $cd_cso)
     {
         try {
@@ -48,6 +50,7 @@ class CourseController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::COURSE_DURATION)]
     public function GetCourseDuration(#[FromRoute] string $cd_cso)
     {
         try {
