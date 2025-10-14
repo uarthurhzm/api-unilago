@@ -12,7 +12,19 @@ class StudentRepository
     {
         $stmt = Database::conn()->prepare(
             "SELECT 
-                ALUNO.*, 
+                ALUNO.CD_ALU,
+                ALUNO.NM_ALU,
+                ALUNO.EMAIL,
+                ALUNO.NM_RUA,
+                ALUNO.NR_RUA,
+                ALUNO.COMP_RUA,
+                ALUNO.NM_BAI,
+                ALUNO.RG_PRO,
+                ALUNO.CPF_PRO,
+                ALUNO.DT_NASC,
+                ALUNO.TEL_COM,
+                ALUNO.TEL_RES,
+                ALUNO.TEL_CEL,
                 CIDADE.NM_CID 
             FROM 
                 ALUNO 
@@ -26,18 +38,9 @@ class StudentRepository
         $result = $stmt->fetch();
 
         if ($result) {
-            $result->FOTO_ALUNO = base64_encode($result->FOTO_ALUNO);
-            $result->DISC1 = iconv('ISO-8859-1', 'UTF-8', $result->DISC1);
-            $result->DISC2 = iconv('ISO-8859-1', 'UTF-8', $result->DISC2);
-            $result->DISC3 = iconv('ISO-8859-1', 'UTF-8', $result->DISC3);
-            $result->DISC4 = iconv('ISO-8859-1', 'UTF-8', $result->DISC4);
             $result->NM_CID = iconv('ISO-8859-1', 'UTF-8', $result->NM_CID);
-            $result->OBS_FINANCEIRO = iconv('ISO-8859-1', 'UTF-8', $result->OBS_FINANCEIRO);
-            $result->ESCOLA2GRAU = iconv('ISO-8859-1', 'UTF-8', $result->ESCOLA2GRAU);
-            $result->CIDADE2GRAU = iconv('ISO-8859-1', 'UTF-8', $result->CIDADE2GRAU);
         }
 
-        // var_dump($result);
         return $result;
     }
 
@@ -667,7 +670,13 @@ class StudentRepository
         );
 
         $stmt->execute([':login' => $login]);
-        return $stmt->fetchAll();
+        // var_dump($stmt->fetchAll());
+
+        return array_map(function ($course) {
+            $course->NOMECURSO = iconv('ISO-8859-1', 'UTF-8', $course->NOMECURSO);
+            $course->PROFESSORES = iconv('ISO-8859-1', 'UTF-8', $course->PROFESSORES);
+            return $course;
+        }, $stmt->fetchAll());
     }
 
     public function GetStudentScientificMeeting($cd_mat)
