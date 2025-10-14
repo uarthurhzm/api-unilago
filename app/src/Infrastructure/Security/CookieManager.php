@@ -27,8 +27,7 @@ class CookieManager
                 'expires' => time() + $this->refreshTokenExpiry,
                 'samesite' => 'None', // 'Lax' ou 'Strict' se não for cross-site
                 'secure' => $this->isProduction,
-                // 'domain' => '.unilago.edu.br',
-                // 'domain' => '.ngrok-free.dev',
+                // 'domain' => '.unilago.edu.br', // Descomentar isso quando for deployar
                 'httponly' => true,
             ]
         );
@@ -48,8 +47,7 @@ class CookieManager
                 'expires' => time() - 3600,
                 'samesite' => 'None', // 'Lax' ou 'Strict' se não for cross-site
                 'secure' => $this->isProduction,
-                // 'domain' => '.unilago.edu.br',
-                // 'domain' => '.ngrok-free.dev',
+                // 'domain' => '.unilago.edu.br', // Descomentar isso quando for deployar
                 'httponly' => true,
             ]
         );
