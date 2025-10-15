@@ -8,10 +8,7 @@ use App\Infrastructure\Http\Response;
 
 class LogController extends ControllerBase
 {
-    private LogService $logService;
-
-    public function __construct()
-    {
-        $this->logService = new LogService();
-    }
+    public function __construct(
+        private LogService $logService
+    ) {}
 }

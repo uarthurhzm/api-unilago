@@ -5,7 +5,6 @@ namespace App\Application\Controllers;
 use App\Domain\Auth\DTO\GetByCpfDTO;
 use App\Domain\Auth\DTO\LoginDTO;
 use App\Domain\Auth\Service\AuthService;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Infrastructure\Security\CookieManager;
 use App\Infrastructure\Security\JWT;
@@ -17,16 +16,11 @@ use App\Shared\Utils\Routes;
 
 class AuthController extends ControllerBase
 {
-    private AuthService $authService;
-    private JWT $jwt;
-    private CookieManager $cookieManager;
-
-    public function __construct()
-    {
-        $this->authService = new AuthService();
-        $this->jwt = new JWT();
-        $this->cookieManager = new CookieManager();
-    }
+    public function __construct(
+        private AuthService $authService,
+        private JWT $jwt,
+        private CookieManager $cookieManager
+    ) {}
 
     #[HttpPost(Routes::AUTH_LOGIN, [])]
     public function Login(#[FromBody] LoginDTO $data): void

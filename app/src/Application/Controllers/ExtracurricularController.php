@@ -5,24 +5,19 @@ namespace App\Application\Controllers;
 use App\Domain\Extracurricular\DTO\PostActivityDTO;
 use App\Domain\Extracurricular\Services\ExtracurricularService;
 use App\Domain\Notice\DTO\GetByStudentDTO;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
 use App\Shared\Attributes\HttpDelete;
 use App\Shared\Attributes\HttpGet;
 use App\Shared\Attributes\HttpPost;
-use App\Shared\Helpers\Validators;
 use App\Shared\Utils\Routes;
 
 class ExtracurricularController extends ControllerBase
 {
-    private ExtracurricularService $extracurricularService;
-
-    public function __construct()
-    {
-        $this->extracurricularService = new ExtracurricularService();
-    }
+    public function __construct(
+        private ExtracurricularService $extracurricularService
+    ) {}
 
     #[HttpGet(Routes::EXTRACURRICULAR_ACTIVITIES)]
     public function GetAll()

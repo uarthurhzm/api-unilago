@@ -6,24 +6,18 @@ use App\Domain\Message\DTO\GetUserMessagesDTO;
 use App\Domain\Message\DTO\PostCommentDTO;
 use App\Domain\Message\DTO\PostMessageDTO;
 use App\Domain\Message\Services\MessageService;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
 use App\Shared\Attributes\HttpGet;
 use App\Shared\Attributes\HttpPost;
-use App\Shared\Helpers\Validators;
 use App\Shared\Utils\Routes;
-use LDAP\Result;
 
 class MessageController extends ControllerBase
 {
-    private MessageService $messageService;
-
-    public function __construct()
-    {
-        $this->messageService = new MessageService();
-    }
+    public function __construct(
+        private MessageService $messageService
+    ) {}
 
     #[HttpPost(Routes::POST_MESSAGE)]
     public function PostMessage(#[FromBody] PostMessageDTO $data)

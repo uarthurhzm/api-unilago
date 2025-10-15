@@ -19,12 +19,9 @@ use SamePasswordException;
 
 class StudentController extends ControllerBase
 {
-    private StudentService $studentService;
-
-    public function __construct()
-    {
-        $this->studentService = new StudentService();
-    }
+    public function __construct(
+        private StudentService $studentService
+    ) {}
 
     #[HttpGet(Routes::STUDENT)]
     public function Get(#[FromRoute] string $cd_mat): void

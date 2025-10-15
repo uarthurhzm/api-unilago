@@ -9,12 +9,9 @@ use App\Shared\Utils\Routes;
 
 class CampusController extends ControllerBase
 {
-    private CampusService $campusService;
-
-    public function __construct()
-    {
-        $this->campusService = new CampusService();
-    }
+    public function __construct(
+        private CampusService $campusService
+    ) {}
 
     #[HttpGet(Routes::CAMPUSES)]
     public function GetAllCampus()

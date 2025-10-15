@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Http;
 
+use App\Infrastructure\DI\Container;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
 use App\Shared\DTO\BaseDTO;
@@ -66,7 +67,7 @@ class Router
                 $params = self::extractParams($route['path'], $matches);
                 $request->setParams($params);
 
-                self::callHandler($route['handler'], $request);
+                self::callHandler($route, $request);
                 return;
             }
         }
@@ -96,25 +97,17 @@ class Router
         return $params;
     }
 
-    private static function callHandler(array $handler, Request $request): void
+    private static function callHandler(array $route, Request $request): void
     {
-        [$class, $method] = $handler;
+        [$class, $method] = $route['handler'];
 
-        if (!class_exists($class)) {
-            throw new \Exception("Controller {$class} não encontrado");
-        }
-
-        $controller = new $class();
-
-        if (!method_exists($controller, $method)) {
-            throw new \Exception("Método {$method} não encontrado no controller {$class}");
-        }
-
-        $route = self::$routes[array_search($handler, array_column(self::$routes, 'handler'))];
+        $controller = Container::resolve($class);
+        $reflection = new ReflectionMethod($controller, $method);
+        $parameters = self::resolveParameters($reflection, $request);
 
         if ($route['middlewares']) {
             foreach ($route['middlewares'] as $middleware) {
-                $middlewareInstance = new $middleware();
+                $middlewareInstance = Container::resolve($middleware);
                 [$data, $message, $status] = $middlewareInstance->handle($request);
                 if (!$data) {
                     Response::$status($message);
@@ -123,18 +116,7 @@ class Router
             }
         }
 
-        $reflection = new ReflectionMethod($controller, $method);
-        $parameters = $reflection->getParameters();
-
-        $args = [];
-
-        foreach ($parameters as $param) {
-            $args[] = self::resolveParameter($param, $request);
-        }
-
-        call_user_func_array([$controller, $method], $args);
-
-        // $controller->$method($request);
+        $reflection->invokeArgs($controller, $parameters);
     }
 
     public static function getRoutes(): array
@@ -142,55 +124,69 @@ class Router
         return self::$routes;
     }
 
-    private static function resolveParameter(ReflectionParameter $param, Request $request): mixed
+    private static function resolveParameters(ReflectionMethod $method, Request $request): array
     {
-        $type = $param->getType();
+        $resolved = [];
+        foreach ($method->getParameters() as $param) {
+            $type = $param->getType();
 
-        // Se o tipo é Request, passa o request
-        if ($type && $type->getName() === Request::class) {
-            return $request;
-        }
+            // Se o tipo é Request, passa o request
+            if ($type && $type->getName() === Request::class) {
+                $resolved[] = $request;
+                continue;
+            }
 
-        // Verifica atributos do parâmetro
-        $attributes = $param->getAttributes();
+            // Verifica atributos do parâmetro
+            $attributes = $param->getAttributes();
 
-        foreach ($attributes as $attribute) {
-            $attributeInstance = $attribute->newInstance();
+            $handled = false;
+            foreach ($attributes as $attribute) {
+                $attributeInstance = $attribute->newInstance();
 
-            // FromBody - cria DTO do corpo da requisição
-            if ($attributeInstance instanceof FromBody) {
-                $dtoClass = $type->getName();
+                // FromBody - cria DTO do corpo da requisição
+                if ($attributeInstance instanceof FromBody) {
+                    $dtoClass = $type->getName();
 
-                if (!is_subclass_of($dtoClass, BaseDTO::class)) {
-                    Response::error('Tipo de parâmetro inválido');
-                }
-
-                $dto = new $dtoClass($request->getData());
-
-                if ($attributeInstance->validate) {
-                    $errors = $dto->validate();
-                    if (!empty($errors)) {
-                        Response::badRequest(implode(', ', $errors));
+                    if (!is_subclass_of($dtoClass, BaseDTO::class)) {
+                        Response::error('Tipo de parâmetro inválido');
                     }
+
+                    $dto = new $dtoClass($request->getData());
+
+                    if ($attributeInstance->validate) {
+                        $errors = $dto->validate();
+                        if (!empty($errors)) {
+                            Response::badRequest(implode(', ', $errors));
+                        }
+                    }
+
+                    $resolved[] = $dto;
+                    $handled = true;
+                    break;
                 }
 
-                return $dto;
-            }
+                // FromRoute - pega parâmetro da rota
+                if ($attributeInstance instanceof FromRoute) {
+                    $paramName = $attributeInstance->name ?? $param->getName();
+                    $value = $request->getParams()[$paramName] ?? null;
 
-            // FromRoute - pega parâmetro da rota
-            if ($attributeInstance instanceof FromRoute) {
-                $paramName = $attributeInstance->name ?? $param->getName();
-                $value = $request->getParams()[$paramName] ?? null;
+                    if ($value === null && !$param->isOptional()) {
+                        Response::badRequest("Parâmetro '{$paramName}' é obrigatório");
+                    }
 
-                if ($value === null && !$param->isOptional()) {
-                    Response::badRequest("Parâmetro '{$paramName}' é obrigatório");
+                    $resolved[] = $value;
+                    $handled = true;
+                    break;
                 }
-
-                return $value;
             }
+
+            if ($handled) {
+                continue;
+            }
+
+            // Se não tem atributo, retorna valor padrão ou null
+            $resolved[] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
         }
-
-        // Se não tem atributo, retorna valor padrão ou null
-        return $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
+        return $resolved;
     }
 }

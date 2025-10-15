@@ -6,24 +6,19 @@ use AlreadyReservedBookException;
 use App\Domain\Library\DTO\GetAllCollectionsDTO;
 use App\Domain\Library\DTO\GetLoanedBooksByStudentDTO;
 use App\Domain\Library\Services\LibraryService;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
 use App\Shared\Attributes\HttpDelete;
 use App\Shared\Attributes\HttpGet;
 use App\Shared\Attributes\HttpPost;
-use App\Shared\Helpers\Validators;
 use App\Shared\Utils\Routes;
 
 class LibraryController extends ControllerBase
 {
-    private LibraryService $libraryService;
-
-    public function __construct()
-    {
-        $this->libraryService = new LibraryService();
-    }
+    public function __construct(
+        private LibraryService $libraryService
+    ) {}
 
     #[HttpGet(Routes::LIBRARY_COLLECTIONS)]
     public function GetAllCollections(#[FromBody] GetAllCollectionsDTO $data): void

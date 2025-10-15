@@ -3,7 +3,6 @@
 namespace App\Application\Controllers;
 
 use App\Infrastructure\Database;
-use App\Infrastructure\Http\PrivateRoute;
 use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\HttpGet;

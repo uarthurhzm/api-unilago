@@ -4,23 +4,18 @@ namespace App\Application\Controllers;
 
 use App\Domain\Cpa\DTO\PostAnswerDTO;
 use App\Domain\Cpa\Services\CpaService;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Attributes\FromBody;
 use App\Shared\Attributes\FromRoute;
 use App\Shared\Attributes\HttpGet;
 use App\Shared\Attributes\HttpPost;
-use App\Shared\Helpers\Validators;
 use App\Shared\Utils\Routes;
 
 class CpaController extends ControllerBase
 {
-    private CpaService $cpaService;
-
-    public function __construct()
-    {
-        $this->cpaService = new CpaService();
-    }
+    public function __construct(
+        private CpaService $cpaService
+    ) {}
 
     #[HttpGet(Routes::CPA_QUESTIONS)]
     public function GetStudentInstitutionQuestions(#[FromRoute] string $cd_mat)

@@ -10,12 +10,9 @@ use App\Shared\Utils\Routes;
 
 class FinancialController extends ControllerBase
 {
-    private FinancialService $financialService;
-
-    public function __construct()
-    {
-        $this->financialService = new FinancialService();
-    }
+    public function __construct(
+        private FinancialService $financialService
+    ) {}
 
     #[HttpGet(Routes::FINANCIAL_TAXES)]
     public function GetTaxes()

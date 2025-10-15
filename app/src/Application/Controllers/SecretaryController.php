@@ -5,7 +5,6 @@ namespace App\Application\Controllers;
 use App\Domain\Secretary\DTO\DeleteSubstituteExamRequestDTO;
 use App\Domain\Secretary\DTO\PostCertificateRequestDTO;
 use App\Domain\Secretary\DTO\PostSubstituteExamRequestDTO;
-use App\Infrastructure\Http\Request;
 use App\Infrastructure\Http\Response;
 use App\Shared\Exceptions\CreateAcademicRecordException;
 use App\Shared\Helpers\Validators;
@@ -19,12 +18,9 @@ use App\Shared\Utils\Routes;
 
 class SecretaryController extends ControllerBase
 {
-    private SecretaryService $secretaryService;
-
-    public function __construct()
-    {
-        $this->secretaryService = new SecretaryService();
-    }
+    public function __construct(
+        private SecretaryService $secretaryService
+    ) {}
 
     #[HttpGet(Routes::SECRETARY_ENROLLMENT_CERTIFICATES)]
     public function GetEnrollmentCertificatesByStudent(#[FromRoute] string $cd_mat)

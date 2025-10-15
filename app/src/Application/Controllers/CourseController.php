@@ -10,12 +10,9 @@ use App\Shared\Utils\Routes;
 
 class CourseController extends ControllerBase
 {
-    private CourseService $courseService;
-
-    public function __construct()
-    {
-        $this->courseService = new CourseService();
-    }
+    public function __construct(
+        private CourseService $courseService
+    ) {}
 
     #[HttpGet(Routes::COURSES)]
     public function GetAllCourses()

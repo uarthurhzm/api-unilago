@@ -11,12 +11,11 @@ use App\Shared\Utils\Routes;
 
 class EventsController extends ControllerBase
 {
-    private EventsService $eventsService;
 
-    public function __construct()
-    {
-        $this->eventsService = new EventsService();
-    }
+
+    public function __construct(
+        private EventsService $eventsService
+    ) {}
 
     #[HttpGet(Routes::SCHEDULED_EVENTS)]
     public function GetEvents(#[FromBody] GetEventsDTO $data): void
