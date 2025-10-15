@@ -10,14 +10,10 @@ use App\Domain\Student\Repository\StudentRepository;
 
 class SecretaryService
 {
-    private SecretaryRepository $secretaryRepository;
-    private StudentRepository $studentRepository;
-
-    public function __construct()
-    {
-        $this->secretaryRepository = new SecretaryRepository();
-        $this->studentRepository = new StudentRepository();
-    }
+    public function __construct(
+        private SecretaryRepository $secretaryRepository,
+        private StudentRepository $studentRepository
+    ) {}
 
     public function GetEnrollmentCertificatesByStudent($cd_mat)
     {

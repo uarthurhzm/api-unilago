@@ -8,12 +8,7 @@ use App\Domain\Message\Repository\MessageRepository;
 
 class MessageService
 {
-    private MessageRepository $messageRepository;
-
-    public function __construct()
-    {
-        $this->messageRepository = new MessageRepository();
-    }
+    public function __construct(private MessageRepository $messageRepository) {}
 
     public function PostMessage(PostMessageDTO $data)
     {

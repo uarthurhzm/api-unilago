@@ -6,12 +6,7 @@ use App\Domain\Course\Repository\CourseRepository;
 
 class CourseService
 {
-    private CourseRepository $courseRepository;
-
-    public function __construct()
-    {
-        $this->courseRepository = new CourseRepository();
-    }
+    public function __construct(private CourseRepository $courseRepository) {}
 
     public function GetAllCourses()
     {

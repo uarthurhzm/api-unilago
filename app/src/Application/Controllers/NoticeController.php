@@ -12,12 +12,7 @@ use App\Shared\Utils\Routes;
 
 class NoticeController extends ControllerBase
 {
-    private NoticeService $NoticeService;
-
-    public function __construct()
-    {
-        $this->NoticeService = new NoticeService();
-    }
+    public function __construct(private NoticeService $NoticeService) {}
 
     #[HttpGet(Routes::NOTICES)]
     public function GetNotices(#[FromBody] GetNoticesDTO $data)

@@ -11,13 +11,11 @@ use SamePasswordException;
 
 class StudentService
 {
-    private StudentRepository $studentRepository;
-    private LogRepository $logRepository;
-    public function __construct()
-    {
-        $this->studentRepository = new StudentRepository();
-        $this->logRepository = new LogRepository();
-    }
+
+    public function __construct(
+        private StudentRepository $studentRepository,
+        private LogRepository $logRepository
+    ) {}
 
     public function Get(string $cd_mat)
     {

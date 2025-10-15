@@ -7,12 +7,7 @@ use App\Domain\Cpa\Repositories\CpaRepository;
 
 class CpaService
 {
-    private CpaRepository $cpaRepository;
-
-    public function __construct()
-    {
-        $this->cpaRepository = new CpaRepository();
-    }
+    public function __construct(private CpaRepository $cpaRepository) {}
 
     public function GetStudentInstitutionQuestions($cd_mat): array
     {

@@ -11,6 +11,8 @@ use App\Shared\Enum\StatusCodeEnum;
 class AuthMiddleware extends Middleware
 {
 
+    public function __construct(private JWT $jwt) {}
+
     public function handle(...$params): array
     {
         /** @var Request $request */
@@ -34,7 +36,7 @@ class AuthMiddleware extends Middleware
         }
 
         $token = $matches[1];
-        $payload = (new JWT())->validateAccessToken($token);
+        $payload = $this->jwt->validateAccessToken($token);
 
         if (!$payload) {
             // Response::badRequest('Token inválido ou expirado');

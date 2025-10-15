@@ -13,16 +13,14 @@ class JWT
     private string $algorithm;
     private int $accessExpiration;
     private int $refreshExpiration;
-    private CookieManager $cookieManager;
 
-    public function __construct()
+    public function __construct(private CookieManager $cookieManager)
     {
         $this->accessSecretKey = DotEnv::get(DotEnvKeysEnum::JWT_ACCESS_SECRET->value);
         $this->refreshSecretKey = DotEnv::get(DotEnvKeysEnum::JWT_REFRESH_SECRET->value);
         $this->algorithm = DotEnv::get(DotEnvKeysEnum::JWT_ALGORITHM->value);
         $this->accessExpiration = (int) DotEnv::get(DotEnvKeysEnum::JWT_EXPIRATION->value);
         $this->refreshExpiration  = (int) DotEnv::get(DotEnvKeysEnum::JWT_REFRESH_EXPIRATION->value);
-        $this->cookieManager = new CookieManager();
     }
 
     public function generateAccessToken(array $payload): string

@@ -8,12 +8,7 @@ use App\Domain\Library\Repositories\LibraryRepository;
 
 class LibraryService
 {
-    private LibraryRepository $libraryRepository;
-
-    public function __construct()
-    {
-        $this->libraryRepository = new LibraryRepository();
-    }
+    public function __construct(private LibraryRepository $libraryRepository) {}
 
     public function GetAllCollections(GetAllCollectionsDTO $data)
     {

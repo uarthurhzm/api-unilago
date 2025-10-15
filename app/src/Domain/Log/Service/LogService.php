@@ -6,12 +6,7 @@ use App\Domain\Log\Repositories\LogRepository;
 
 class LogService
 {
-    private LogRepository $logRepository;
-
-    public function __construct()
-    {
-        $this->logRepository = new LogRepository();
-    }
+    public function __construct(private LogRepository $logRepository) {}
 
     public function ChangePasswordLog($data)
     {

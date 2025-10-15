@@ -6,12 +6,7 @@ use App\Domain\Professor\Repository\ProfessorRepository;
 
 class ProfessorService
 {
-    private ProfessorRepository $professorRepository;
-
-    public function __construct()
-    {
-        $this->professorRepository = new ProfessorRepository();
-    }
+    public function __construct(private ProfessorRepository $professorRepository) {}
 
     public function GetAllIESProfessors(): array
     {

@@ -6,12 +6,7 @@ use App\Domain\Financial\Repositories\FinancialRepository;
 
 class FinancialService
 {
-    private FinancialRepository $financialRepository;
-
-    public function __construct()
-    {
-        $this->financialRepository = new FinancialRepository();
-    }
+    public function __construct(private FinancialRepository $financialRepository) {}
 
     public function GetTaxes()
     {

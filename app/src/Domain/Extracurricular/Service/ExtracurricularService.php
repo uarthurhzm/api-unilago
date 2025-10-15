@@ -8,12 +8,7 @@ use CURLFile;
 
 class ExtracurricularService
 {
-    private ExtracurricularRepository $extracurricularRepository;
-
-    public function __construct()
-    {
-        $this->extracurricularRepository = new ExtracurricularRepository();
-    }
+    public function __construct(private ExtracurricularRepository $extracurricularRepository) {}
 
     public function GetAll(): array
     {

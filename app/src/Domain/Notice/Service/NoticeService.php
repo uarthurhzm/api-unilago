@@ -7,12 +7,7 @@ use App\Domain\Notice\Repository\NoticeRepository;
 
 class NoticeService
 {
-    private NoticeRepository $NoticeRepository;
-
-    public function __construct()
-    {
-        $this->NoticeRepository = new NoticeRepository();
-    }
+    public function __construct(private NoticeRepository $NoticeRepository) {}
 
     public function GetNotices(GetNoticesDTO $data)
     {

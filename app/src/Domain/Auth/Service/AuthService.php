@@ -12,16 +12,11 @@ use App\Shared\Utils\EmailTemplateLoader;
 
 class AuthService
 {
-    private AuthRepository $authRepository;
-    private JWT $jwt;
-    private CookieManager $cookieManager;
-
-    public function __construct()
-    {
-        $this->authRepository = new AuthRepository();
-        $this->jwt = new JWT();
-        $this->cookieManager = new CookieManager();
-    }
+    public function __construct(
+        private AuthRepository $authRepository,
+        private JWT $jwt,
+        private CookieManager $cookieManager
+    ) {}
 
     public function Login(string $login, string $password)
     {
