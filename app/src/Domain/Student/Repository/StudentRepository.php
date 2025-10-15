@@ -572,7 +572,12 @@ class StudentRepository
             ':cd_mat' => $cd_mat
         ]);
 
-        return $stmt->fetchAll();
+        return array_map(function ($professor) {
+            $professor->NM_PRO = iconv('ISO-8859-1', 'UTF-8', $professor->NM_PRO);
+            return $professor;
+        }, $stmt->fetchAll());
+
+        // return $stmt->fetchAll();
     }
 
     public function GetStudentByPassword($cd_mat, $password)
