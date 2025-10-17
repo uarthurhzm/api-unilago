@@ -73,6 +73,7 @@ class Routes
     const SECRETARY_SUBSTITUTE_EXAM_REQUEST = '/secretary/substitute-exam/request';
     const SECRETARY_DELETE_SUBSTITUTE_EXAM_REQUEST = '/secretary/substitute-exam/request/{protocol}';
     const SECRETARY_STUDENT_DEPENDENCIES = '/secretary/student/{cd_mat}/dp';
+    const SECRETARY_SECTORS = '/secretary/sectors';
 
     const CPA_QUESTIONS = '/cpa/{cd_mat}/institution/questions';
     const POST_CPA_ANSWER = '/cpa/answer';

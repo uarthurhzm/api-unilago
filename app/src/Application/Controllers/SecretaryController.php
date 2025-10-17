@@ -125,6 +125,17 @@ class SecretaryController extends ControllerBase
         }
     }
 
+    #[HttpGet(Routes::SECRETARY_SECTORS)]
+    public function GetAllSectors()
+    {
+        try {
+            $data = $this->secretaryService->GetAllSectors();
+            Response::success($data, 'Setores buscados com sucesso');
+        } catch (\Throwable $th) {
+            Response::error('Erro ao buscar os setores: ' . $th->getMessage());
+        }
+    }
+
     private function _requestCertificateValidations($data)
     {
         if (!Validators::verifyParameters([

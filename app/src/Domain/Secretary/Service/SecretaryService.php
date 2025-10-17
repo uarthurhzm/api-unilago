@@ -136,6 +136,15 @@ class SecretaryService
         return $this->secretaryRepository->GetStudentDependencies($cd_mat);
     }
 
+    public function GetAllSectors()
+    {
+        $sectors = $this->secretaryRepository->GetAllSectors();
+        //NOTE - por enquanto, vamos apenas colocar SECRETARIA, FINANCEIRO e COORDENAÇÃO
+        return array_filter($sectors, function ($sector) {
+            return in_array($sector->cd_set, [1, 11, 20]);
+        });
+    }
+
 
     private function _requestBasicInfo()
     {

@@ -258,4 +258,27 @@ class SecretaryRepository
             return $dep;
         }, $stmt->fetchAll());
     }
+
+    public function GetAllSectors()
+    {
+        $stmt = Database::conn()->prepare(
+            "SELECT 
+                setor.CD_SET,
+                setor.NM_SET 
+            FROM 
+                setor 
+            WHERE 
+                -- SETOR.CD_SET IN (1, 11, 20) -- Secretaria, Financeiro, Coordenação
+                SETOR.STATUS=1 
+                AND setor.ATENDIMENTO=1
+            ORDER BY 
+                setor.NM_SET
+            "
+        );
+        $stmt->execute();
+        return array_map(function ($sector) {
+            $sector->NM_SET = iconv('ISO-8859-1', 'UTF-8', $sector->NM_SET);
+            return $sector;
+        }, $stmt->fetchAll());
+    }
 }
