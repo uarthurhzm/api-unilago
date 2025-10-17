@@ -138,11 +138,11 @@ class SecretaryService
 
     public function GetAllSectors()
     {
+        // return $this->secretaryRepository->GetAllSectors();
         $sectors = $this->secretaryRepository->GetAllSectors();
+
         //NOTE - por enquanto, vamos apenas colocar SECRETARIA, FINANCEIRO e COORDENAÇÃO
-        return array_filter($sectors, function ($sector) {
-            return in_array($sector->cd_set, [1, 11, 20]);
-        });
+        return array_values(array_filter($sectors, fn($sector) => in_array($sector->CD_SET, [1, 11, 20])));
     }
 
 
