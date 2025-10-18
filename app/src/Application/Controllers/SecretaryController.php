@@ -136,46 +136,14 @@ class SecretaryController extends ControllerBase
         }
     }
 
-    private function _requestCertificateValidations($data)
+    #[HttpGet('/secretary/sectors/{cd_set}/protocol-types')]
+    public function GetProtocolTypesBySector(#[FromRoute] string $cd_set)
     {
-        if (!Validators::verifyParameters([
-            'cd_emp',
-            'cd_alu',
-            'cd_cso',
-            'anoval_mat',
-            'semval_mat',
-            'serie_mat',
-            'period_mat',
-            'phone',
-            'email',
-        ], $data))
-            Response::error('Parâmetros inválidos');
-
-        if (Validators::isEmpty($data['cd_emp']) || !Validators::isNumber($data['cd_emp']))
-            Response::error('Parâmetro cd_emp inválido');
-
-        if (Validators::isEmpty($data['cd_alu']) || !Validators::isNumber($data['cd_alu']))
-            Response::error('Parâmetro cd_alu inválido');
-
-        if (Validators::isEmpty($data['cd_cso']) || !Validators::isNumber($data['cd_cso']))
-            Response::error('Parâmetro cd_cso inválido');
-
-        if (Validators::isEmpty($data['anoval_mat']) || !Validators::isNumber($data['anoval_mat']))
-            Response::error('Parâmetro anoval_mat inválido');
-
-        if (Validators::isEmpty($data['semval_mat']) || !Validators::isNumber($data['semval_mat']))
-            Response::error('Parâmetro semval_mat inválido');
-
-        if (Validators::isEmpty($data['serie_mat']) || !Validators::isNumber($data['serie_mat']))
-            Response::error('Parâmetro serie_mat inválido');
-
-        if (Validators::isEmpty($data['period_mat']) || !Validators::isNumber($data['period_mat']))
-            Response::error('Parâmetro period_mat inválido');
-
-        if (Validators::isEmpty($data['phone']) || !Validators::isPhone($data['phone']))
-            Response::badRequest('Telefone inválido');
-
-        if (Validators::isEmpty($data['email']) || !Validators::isEmail($data['email']))
-            Response::badRequest('Email inválido');
+        try {
+            $data = $this->secretaryService->GetProtocolTypesBySector($cd_set);
+            Response::success($data, 'Tipos de protocolo buscados com sucesso');
+        } catch (\Throwable $th) {
+            Response::error('Erro ao buscar os tipos de protocolo: ' . $th->getMessage());
+        }
     }
 }

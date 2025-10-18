@@ -145,6 +145,11 @@ class SecretaryService
         return array_values(array_filter($sectors, fn($sector) => in_array($sector->CD_SET, [1, 11, 20])));
     }
 
+    public function GetProtocolTypesBySector($cd_set)
+    {
+        return $this->secretaryRepository->GetProtocolTypesBySector($cd_set);
+    }
+
 
     private function _requestBasicInfo()
     {

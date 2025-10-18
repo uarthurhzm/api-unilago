@@ -281,4 +281,24 @@ class SecretaryRepository
             return $sector;
         }, $stmt->fetchAll());
     }
+
+    public function GetProtocolTypesBySector($cd_set)
+    {
+        $stmt = Database::conn()->prepare(
+            "SELECT 
+                TIPO_PROTOCOLO.CD_REQ,
+                TIPO_PROTOCOLO.DESCR_REQUERIMENTO 
+            FROM 
+                TIPO_PROTOCOLO 
+            WHERE
+                TIPO_PROTOCOLO.CD_SETOR = :CD_SET
+                AND TIPO_PROTOCOLO.EXIBE_WEB = 1
+            "
+        );
+        $stmt->execute([':CD_SET' => $cd_set]);
+        return array_map(function ($protocolType) {
+            $protocolType->DESCR_REQUERIMENTO = iconv('ISO-8859-1', 'UTF-8', $protocolType->DESCR_REQUERIMENTO);
+            return $protocolType;
+        }, $stmt->fetchAll());
+    }
 }
