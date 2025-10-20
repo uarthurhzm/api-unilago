@@ -25,7 +25,13 @@ class StudentRepository
                 ALUNO.TEL_COM,
                 ALUNO.TEL_RES,
                 ALUNO.TEL_CEL,
-                CIDADE.NM_CID 
+                CIDADE.NM_CID ,
+                ALUNO.CD_EMP,
+                ALUNO.CD_CSO,
+                ALUNO.ANOVAL_MAT,
+                ALUNO.SEMVAL_MAT,
+                ALUNO.SERIE,
+                ALUNO.PER_GDE
             FROM 
                 ALUNO 
                 JOIN CIDADE ON ALUNO.CD_CID = CIDADE.CD_CID 

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Secretary\Service;
 
+use App\Domain\Secretary\DTO\PostAttendanceRequestDTO;
 use App\Domain\Secretary\DTO\PostCertificateRequestDTO;
 use App\Domain\Secretary\DTO\PostSubstituteExamRequestDTO;
 use App\Shared\Exceptions\CreateAcademicRecordException;
@@ -148,6 +149,30 @@ class SecretaryService
     public function GetProtocolTypesBySector($cd_set)
     {
         return $this->secretaryRepository->GetProtocolTypesBySector($cd_set);
+    }
+
+    public function PostAttendanceRequest(PostAttendanceRequestDTO $data)
+    {
+        // var_dump($data);
+        // exit;
+        $insert = array_merge(
+            $data->toArray(),
+            $this->_requestBasicInfo()
+        );
+
+        $protocolNumber = $this->secretaryRepository->PostRequest($insert);
+        $protocol = $this->secretaryRepository->GetRequestByProtocol($protocolNumber);
+
+        if (!!$data->disciplineIds && !!count((array)$data->disciplineIds)) {
+            foreach ((array)$data->disciplineIds as $disciplineId) {
+                $this->secretaryRepository->PostAttendanceRequestDisciplines(
+                    $protocol->id,
+                    $disciplineId
+                );
+            }
+        }
+
+        return $protocol;
     }
 
 

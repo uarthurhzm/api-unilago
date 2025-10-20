@@ -23,7 +23,7 @@ require_once __DIR__ . '/headers.php';
 require_once __DIR__ . '/bootstrap.php';
 
 try {
-    
+
     RouteDiscovery::registerAll([
         StudentController::class,
         AuthController::class,
@@ -43,5 +43,5 @@ try {
     $request = new Request();
     Router::dispatch($request);
 } catch (\Throwable $th) {
-    Response::error('Erro interno do servidor: ' . $th->getMessage());
+    Response::error('Erro interno do servidor [' . ($th->getFile() ?? 'unknown file') . ':' . ($th->getLine() ?? 'unknown line') . ']: ' . $th->getMessage());
 }

@@ -156,7 +156,7 @@ class Router
                     if ($attributeInstance->validate) {
                         $errors = $dto->validate();
                         if (!empty($errors)) {
-                            Response::badRequest(implode(', ', $errors));
+                            Response::error(implode(', ', $errors));
                         }
                     }
 

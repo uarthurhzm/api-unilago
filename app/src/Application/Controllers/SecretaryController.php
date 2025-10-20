@@ -3,6 +3,7 @@
 namespace App\Application\Controllers;
 
 use App\Domain\Secretary\DTO\DeleteSubstituteExamRequestDTO;
+use App\Domain\Secretary\DTO\PostAttendanceRequestDTO;
 use App\Domain\Secretary\DTO\PostCertificateRequestDTO;
 use App\Domain\Secretary\DTO\PostSubstituteExamRequestDTO;
 use App\Infrastructure\Http\Response;
@@ -144,6 +145,17 @@ class SecretaryController extends ControllerBase
             Response::success($data, 'Tipos de protocolo buscados com sucesso');
         } catch (\Throwable $th) {
             Response::error('Erro ao buscar os tipos de protocolo: ' . $th->getMessage());
+        }
+    }
+
+    #[HttpPost('/secretary/attendance-request')]
+    public function PostAttendanceRequest(#[FromBody] PostAttendanceRequestDTO $data): void
+    {
+        try {
+            $protocol = $this->secretaryService->PostAttendanceRequest($data);
+            Response::success(['protocol' => $protocol], 'Requerimento de atendimento realizado com sucesso');
+        } catch (\Throwable $th) {
+            Response::error('Erro ao realizar o requerimento de atendimento: ' . $th->getMessage());
         }
     }
 }

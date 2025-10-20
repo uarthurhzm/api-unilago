@@ -2,7 +2,9 @@
 
 namespace App\Domain\Secretary\Repository;
 
+use App\Domain\Secretary\DTO\PostAttendanceRequestDTO;
 use App\Infrastructure\Database;
+use ReturnTypeWillChange;
 
 class SecretaryRepository
 {
@@ -31,6 +33,30 @@ class SecretaryRepository
         ]);
 
         return $stmt->fetchAll();
+    }
+
+    public function GetRequestByProtocol($protocol)
+    {
+        $stmt = Database::conn()->prepare(
+            "SELECT 
+                PROTOCOLO.*
+            FROM 
+                PROTOCOLO
+            WHERE 
+                NUM_PROT = :NUM_PROT
+            "
+        );
+
+        $stmt->execute([':NUM_PROT' => $protocol]);
+        $result = $stmt->fetch();
+
+        if ($result) {
+            $result->OBS_FECH = iconv('ISO-8859-1', 'UTF-8', $result->OBS_FECH);
+            $result->DESC_MOTIVO = iconv('ISO-8859-1', 'UTF-8', $result->DESC_MOTIVO);
+            $result->DESC_REQUERIMENTO = iconv('ISO-8859-1', 'UTF-8', $result->DESC_REQUERIMENTO);
+        }
+
+        return $result;
     }
 
     public function PostRequest($data)
@@ -300,5 +326,30 @@ class SecretaryRepository
             $protocolType->DESCR_REQUERIMENTO = iconv('ISO-8859-1', 'UTF-8', $protocolType->DESCR_REQUERIMENTO);
             return $protocolType;
         }, $stmt->fetchAll());
+    }
+
+    public function PostAttendanceRequestDisciplines($protocolId, $disciplineId)
+    {
+        $stmt = Database::conn()->prepare(
+            "INSERT INTO 
+                PROTOCOLO_DISC 
+                    (
+                        PROTOCOLO_DISC.ID_PROT,
+                        PROTOCOLO_DISC.ID_DISC,
+                        PROTOCOLO_DISC.ACAO
+                    ) 
+                VALUES 
+                    (
+                        :id_prot,
+                        :id_disc,
+                        1
+                    ) 
+            "
+        );
+
+        $stmt->execute([
+            ':id_prot' => $protocolId,
+            ':id_disc' => $disciplineId,
+        ]);
     }
 }
