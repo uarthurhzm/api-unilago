@@ -18,7 +18,42 @@ class PostAttendanceRequestDTO extends BaseDTO
     public mixed $disciplineIds;
     public ?string $documentId;
     public string $description;
-    public ?array $attachments;
+    public mixed $attachments = null;
+
+    public function __construct(array $data = [])
+    {
+        parent::__construct($data);
+
+        if (isset($_FILES['attachments'])) {
+            $this->attachments = $this->normalizeFiles($_FILES['attachments']);
+        }
+    }
+
+    private function normalizeFiles(array $files): array
+    {
+        $normalized = [];
+
+        if (is_array($files['name'])) {
+            $fileCount = count($files['name']);
+            for ($i = 0; $i < $fileCount; $i++) {
+                if ($files['error'][$i] === UPLOAD_ERR_OK) {
+                    $normalized[] = [
+                        'name' => $files['name'][$i],
+                        'type' => $files['type'][$i],
+                        'tmp_name' => $files['tmp_name'][$i],
+                        'error' => $files['error'][$i],
+                        'size' => $files['size'][$i]
+                    ];
+                }
+            }
+        } else {
+            if ($files['error'] === UPLOAD_ERR_OK) {
+                $normalized[] = $files;
+            }
+        }
+
+        return $normalized;
+    }
 
     public function validate(): array
     {

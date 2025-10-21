@@ -8,6 +8,7 @@ use App\Domain\Secretary\DTO\PostSubstituteExamRequestDTO;
 use App\Shared\Exceptions\CreateAcademicRecordException;
 use App\Domain\Secretary\Repository\SecretaryRepository;
 use App\Domain\Student\Repository\StudentRepository;
+use App\Shared\Utils\Curl;
 
 class SecretaryService
 {
@@ -55,42 +56,32 @@ class SecretaryService
             throw new CreateAcademicRecordException();
         }
 
-        $url = "https://services.unilago.edu.br/secretaria-digital.php?module=historico&action=novo-historico";
-        $postFields = [
-            "tipo"         => 3,
-            "gera_xml"     => 0,
-            "com_professor" => 0,
-            "ra"           => $data['cd_cso'] . $data['cd_alu'],
-            "cd_usu"       => 30608,
-            "token"        => "b494928ec81ca7ee2b568d962113579c36e2f9b3e32b826c7eb246824821c3fc",
-            "num_prot"     => $protocol
-        ];
+        $curl = new Curl();
+        $response = $curl->POST(
+            'https://services.unilago.edu.br/secretaria-digital.php?module=historico&action=novo-historico',
+            [
+                "tipo"         => 3,
+                "gera_xml"     => 0,
+                "com_professor" => 0,
+                "ra"           => $data['cd_cso'] . $data['cd_alu'],
+                "cd_usu"       => 30608,
+                "token"        => "b494928ec81ca7ee2b568d962113579c36e2f9b3e32b826c7eb246824821c3fc",
+                "num_prot"     => $protocol
+            ],
+            [CURLOPT_SSL_VERIFYPEER => false]
+        );
+        $cod_historico = $response['rvhe']['cod'];
 
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postFields));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $response = curl_exec($ch);
-
-        $response = json_decode($response);
-
-        $cod_historico = $response->rvhe->cod;
-
-        $url = "https://services.unilago.edu.br/secretaria-digital.php?module=historico&action=envia-historico";
-        $postFields = [
-            "codigo_validacao" => $cod_historico,
-            "cd_usu"       => 30608,
-            "token"        => "b494928ec81ca7ee2b568d962113579c36e2f9b3e32b826c7eb246824821c3fc"
-        ];
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postFields));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
+        $curl = new Curl();
+        $response = $curl->POST(
+            'https://services.unilago.edu.br/secretaria-digital.php?module=historico&action=envia-historico',
+            [
+                "codigo_validacao" => $cod_historico,
+                "cd_usu"       => 30608,
+                "token"        => "b494928ec81ca7ee2b568d962113579c36e2f9b3e32b826c7eb246824821c3fc"
+            ],
+            [CURLOPT_SSL_VERIFYPEER => false]
+        );
         return $response;
     }
 
@@ -153,8 +144,7 @@ class SecretaryService
 
     public function PostAttendanceRequest(PostAttendanceRequestDTO $data)
     {
-        // var_dump($data);
-        // exit;
+
         $insert = array_merge(
             $data->toArray(),
             $this->_requestBasicInfo()
@@ -171,7 +161,22 @@ class SecretaryService
             }
         }
 
-        return $protocolNumber;
+        $curl = new Curl();
+        if (!!$data->attachments && !!count((array)$data->attachments)) {
+            foreach ((array)$data->attachments as $attachment) {
+                $response = $curl->POST(
+                    'https://services.unilago.edu.br/aluno.php?action=requerimento',
+                    [
+                        'arquivo'         => new \CURLFile($attachment['tmp_name'], $attachment['type'], $attachment['name'])
+                    ],
+                    [CURLOPT_SSL_VERIFYPEER => false]
+                );
+
+                //TODO - inserir na tabela
+            }
+        }
+
+        return ['protocol' => $protocolNumber];
     }
 
 
