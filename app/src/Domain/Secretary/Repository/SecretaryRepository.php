@@ -2,9 +2,7 @@
 
 namespace App\Domain\Secretary\Repository;
 
-use App\Domain\Secretary\DTO\PostAttendanceRequestDTO;
 use App\Infrastructure\Database;
-use ReturnTypeWillChange;
 
 class SecretaryRepository
 {

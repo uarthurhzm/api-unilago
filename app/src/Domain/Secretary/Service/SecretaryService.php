@@ -161,18 +161,17 @@ class SecretaryService
         );
 
         $protocolNumber = $this->secretaryRepository->PostRequest($insert);
-        $protocol = $this->secretaryRepository->GetRequestByProtocol($protocolNumber);
 
         if (!!$data->disciplineIds && !!count((array)$data->disciplineIds)) {
             foreach ((array)$data->disciplineIds as $disciplineId) {
                 $this->secretaryRepository->PostAttendanceRequestDisciplines(
-                    $protocol->id,
+                    $protocolNumber,
                     $disciplineId
                 );
             }
         }
 
-        return $protocol;
+        return $protocolNumber;
     }
 
 
