@@ -172,7 +172,14 @@ class SecretaryService
                     [CURLOPT_SSL_VERIFYPEER => false]
                 );
 
-                //TODO - inserir na tabela protocolo_anexo
+                // return array('status' => true, 'msg' => 'Arquivo enviado com sucesso', 'file' => $fileName, 'path' => $uploadPath);
+                $fileName = $response['file'];
+                $this->secretaryRepository->PostAttendanceRequestAttachments(
+                    [
+                        'num_prot' => $protocolNumber,
+                        'nm_arquivo' => $fileName
+                    ]
+                );
             }
         }
 

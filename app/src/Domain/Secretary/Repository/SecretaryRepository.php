@@ -373,4 +373,27 @@ class SecretaryRepository
             return $request;
         }, $stmt->fetchAll());
     }
+
+    public function PostAttendanceRequestAttachments($data)
+    {
+        $stmt = Database::conn()->prepare(
+            "INSERT INTO 
+                PROTOCOLO_ANEXO 
+                    (
+                        PROTOCOLO_ANEXO.NUM_PROT,
+                        PROTOCOLO_ANEXO.ARQUIVO
+                    ) 
+                VALUES 
+                    (
+                        :num_prot,
+                        :nm_arquivo
+                    ) 
+            "
+        );
+
+        $stmt->execute([
+            ':num_prot' => $data['num_prot'],
+            ':nm_arquivo' => $data['nm_arquivo']
+        ]);
+    }
 }
