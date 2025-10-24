@@ -172,11 +172,16 @@ class SecretaryService
                     [CURLOPT_SSL_VERIFYPEER => false]
                 );
 
-                //TODO - inserir na tabela
+                //TODO - inserir na tabela protocolo_anexo
             }
         }
 
         return ['protocol' => $protocolNumber];
+    }
+
+    public function GetAttendanceRequestsByStudent($cd_alu)
+    {
+        return $this->secretaryRepository->GetAttendanceRequestsByStudent($cd_alu);
     }
 
 

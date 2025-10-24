@@ -118,7 +118,7 @@ class SecretaryRepository
             ':obs_fech' => $data['obs_fech'],
             ':tel_req' => $data['phone'],
             ':email_req' => $data['email'],
-            ':desc_motivo' => $data['desc_motivo'],
+            ':desc_motivo' => $data['description'],
             ':cd_req' => $data['cd_req'],
             ':situacao' => $data['situacao'],
         ]);
@@ -349,5 +349,28 @@ class SecretaryRepository
             ':id_prot' => $protocolId,
             ':id_disc' => $disciplineId,
         ]);
+    }
+
+    public function GetAttendanceRequestsByStudent($cd_alu)
+    {
+        $stmt = Database::conn()->prepare(
+            "SELECT 
+                PROTOCOLO.NUM_PROT,
+                PROTOCOLO.DT_ABERT,
+                PROTOCOLO.DESC_MOTIVO,
+                PROTOCOLO.SITUACAO 
+            FROM 
+                PROTOCOLO
+            WHERE 
+                CD_ALU = :cd_alu
+            ORDER BY 
+                PROTOCOLO.DT_ABERT DESC
+            "
+        );
+        $stmt->execute([':cd_alu' => $cd_alu]);
+        return array_map(function ($request) {
+            $request->DESC_MOTIVO = iconv('ISO-8859-1', 'UTF-8', $request->DESC_MOTIVO);
+            return $request;
+        }, $stmt->fetchAll());
     }
 }

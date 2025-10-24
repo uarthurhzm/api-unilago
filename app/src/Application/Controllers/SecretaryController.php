@@ -158,4 +158,15 @@ class SecretaryController extends ControllerBase
             Response::error('Erro ao realizar o requerimento de atendimento: ' . $th->getMessage());
         }
     }
+
+    #[HttpGet('/secretary/attendance/students/{cd_alu}/requests')]
+    public function GetAttendanceRequestsByStudent(#[FromRoute] string $cd_alu)
+    {
+        try {
+            $data = $this->secretaryService->GetAttendanceRequestsByStudent($cd_alu);
+            Response::success($data, 'Requerimentos de atendimento do aluno buscados com sucesso');
+        } catch (\Throwable $th) {
+            Response::error('Erro ao buscar os requerimentos de atendimento do aluno: ' . $th->getMessage());
+        }
+    }
 }
